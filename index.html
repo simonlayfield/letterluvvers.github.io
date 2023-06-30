@@ -43,14 +43,14 @@ fetch ("https://api.github.com/repos/letterluvvers/letterluvvers.github.io/conte
 		if (match = data[i].name.match(/\d{4}-{\d{2}-\d{2}}/)) {
 
 			console.log("it's a date", data[i].name, ` event #${eventNum}`);
+			a.textContent = data[i].name;
+			a.href = data[i].html_url;
+			li.append(a);
+			ul.append(li);
 
 			eventNum++;
 		}
 
-		a.textContent = data[i].name;
-		a.href = data[i].html_url;
-		li.append(a);
-		ul.append(li);
 
 		//document.querySelector("#files").append(ul);
 	}
