@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>Home</title>
-	<link rel="stylesheet" href="css/style.css">
+	<!-- <link rel="stylesheet" href="css/style.css"> -->
 </head>
 
 <body>
@@ -13,7 +13,7 @@
 		<h1>Letter Luvvers</h1>
 
 		<div id="files">
-		
+			<ul></ul>
 		</div>
 
 
@@ -33,7 +33,7 @@ fetch ("https://api.github.com/repos/letterluvvers/letterluvvers.github.io/conte
 
 	// list the files
 	console.log(data);
-	var ul = document.querySelector("ul");
+	var ul = document.querySelector("#files ul");
 	for (var i = 0; i < data.length; i++) {
 		var li = document.createElement("li");
 		var a = document.createElement("a");
