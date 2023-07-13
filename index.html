@@ -4,65 +4,191 @@
 	<meta charset="utf-8">
 	<title>Home</title>
 	<!-- <link rel="stylesheet" href="css/style.css"> -->
+
+	<style>
+
+:root {
+	--panel-background-color: rgb(252, 237, 199);
+}
+
+body {
+	margin-top: 10px;
+	padding; 0;
+	background-color: grey;
+	display: grid;
+	grid-template-columns: 1fr min(600px, calc(100% - 60px)) 1fr;
+}
+
+main {
+	/* background-color: black; */
+}
+
+header {
+	background-color: var(--panel-background-color);
+	/* height: 100px;	 */
+	border-radius: 10px;
+	padding: 10px;
+}
+
+footer {
+	background-color: var(--panel-background-color);
+	/* height: 100px;	 */
+	border-radius: 10px;
+	padding: 10px;
+	text-align: center;
+}
+
+.event {
+	background-color: var(--panel-background-color);
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	border-radius: 10px;
+	padding: 10px;
+}
+
+.event .right {
+	text-align: right;
+}
+
+.social-logo {
+	height: 24px;
+}
+
+
+	</style>
 </head>
 
 <body>
-	<header></header>
+
+	<div id="left"></div>
+
 	<main>
 
-		<h1>Letter Luvvers</h1>
+	<header>
+	<h1>Letter Luvvers</h1>
+	<p>Letter Luvvers is a meet-up group for everyone involved with lettering in Bristol.</p>
+	<p>We invite lettering artists, signpainters, typeface designers, letterpress printers, calligraphers, typographers, tattooists, font technologists, font fans and more to come together for drinks and networking every two months. The evenings start with two short talks, then people stay as long as they like for discussion and socializing. The evenings are free, but please sign up on EventBrite so we can judge numbers and contact you in case of important updates. There’s no profit motive, just bringing people of related passions together</p>	
+	</header>
 
-		<div id="files">
-			<ul></ul>
-		</div>
+	<div id="events">
+	</div>
 
 
-
-
+	<footer>
+		<p>
+		<a href="mailto:letterluvvers@gmail.com"><img class="social-logo" src="images/logo-email.png"></a>
+		<a href="https://www.eventbrite.co.uk/o/letter-luvvers-49388686583" target="_blank"><img class="social-logo" src="images/logo-eventbrite.png"></a>
+		<a href="https://twitter.com/letterluvvers" target="_blank"><img class="social-logo" src="images/logo-twitter.png"></a>
+		<a href="https://www.instagram.com/letterluvvers" target="_blank"><img class="social-logo" src="images/logo-instagram.png"></a>
+		</p>
+		<p>© Letter Luvvers 2023</p>
+	</footer>
 	</main>
-	<footer></footer>
+
+	<div id="right"></div>
 </body>
 
 
 <script>
 
 
-fetch ("https://api.github.com/repos/letterluvvers/letterluvvers.github.io/contents/events/").then	(function(response) {
+const dataCache = [
+	{name: "2022-07-20", path: "events/2022-07-20", speakers: ["Toshi Omagari", "Emma Luczyn"], venue: "The Lansdown, Clifton" },
+	{name: "2022-09-21", path: "events/2022-09-21", speakers: ["Fyonafinn", "Athena Cauley-Yu", "Tobias Newbigin"], venue: "The Stag &amp; Hounds, Old Market" },
+	{name: "2022-11-23", path: "events/2022-11-23", speakers: ["Tozer", "Nick Hand"], venue: "Greenbank, Easton" },
+	{name: "2023-01-18", path: "events/2023-01-18", speakers: ["Flora Fricker", "Jamie Clarker"], venue: "Gather Round, St. Paul’s" },
+	{name: "2023-03-22", path: "events/2023-03-22", speakers: ["Elliot Jay Stocks", "Sophia Tai", "Ellen Bills"], venue: "Letterpress Collective" },
+	{name: "2023-05-17", path: "events/2023-05-17", speakers: ["Rhiannon Daniels", "John McTague", "Stephen Glendinning"], venue: "The Lansdown, Clifton" },
+	{name: "2023-06-29", path: "events/2023-06-29", speakers: ["Josh Saunders", "Filip Paldia"], venue: "Walcot Chapel, Bath" },
+]
+
+const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+const fetchOptions = {};
+//fetchOptions.headers = { "Authorization": `Bearer ${YOUR-TOKEN}` };
+
+/*
+fetch ("https://api.github.com/repos/letterluvvers/letterluvvers.github.io/contents/events/", fetchOptions).then(function(response) {
 	return response.json();
 }).then(function(data) {
+*/
+
+{
+const data = dataCache;
+
 
 	// list the files
 	console.log(data);
-	const ul = document.querySelector("#files ul");
-	console.log(ul);
-	for (let i = 0; i < data.length; i++) {
 
-		//console.log(data[i].name);
-		let eventNum = 1;
+	// transform data into events
+	const events = [];
+	data.forEach(item => {
 		let match;
-		if (match = data[i].name.match(/^\d{4}-\d{2}-\d{2}$/)) {
-
-			const li = document.createElement("li");
-			const a = document.createElement("a");
-			const img = document.createElement("img");
-			console.log("it's a date", data[i].name, ` event #${eventNum}`);
-			a.textContent = data[i].name;
-			a.href = data[i].html_url;
-			li.append(a);
-
-			img.src = data[i].path + "/tile.jpg";
-			img.width = 200;
-			img.height = 200;
-			li.append(img);
-			ul.append(li);
-
-			eventNum++;
+		if (match = item.name.match(/^\d{4}-\d{2}-\d{2}$/)) {
+			events.push({
+				date: match[0],
+				path: item.path,
+				name: item.name,
+				tile: "events/" + item.name + "/tile.jpg",
+				speakers: item.speakers,
+				venue: item.venue,
+			});
 		}
+	})
+
+	// sort events by reverse date
+	events.sort((a, b) => {
+		if (a.date < b.date) {
+			return 1;
+		} else if (a.date > b.date) {
+			return -1;
+		} else {
+			return 0;
+		}
+	});
+
+	// give each event a number
+	events.forEach((event, index) => {
+		event.number = events.length - index;
+	});
+
+	const eventsDiv = document.querySelector("#events");
+	events.forEach(event => {
+
+		const dateElements = {
+			day: parseInt(event.date.substr(8, 2), 10),
+			month: months[parseInt(event.date.substr(5, 2), 10) -1], 
+			year: parseInt(event.date.substr(0, 4), 10),
+		};
+		const eventDiv = document.createElement("div");
+		eventDiv.classList.add("event");
+
+		const colL = document.createElement("div");
+		const colR = document.createElement("div");
+
+		colL.innerHTML = "";
+		colL.innerHTML += `<h2>Letter Luvvers #` + event.number + `</h2>`;
+		colL.innerHTML += `<em>` + dateElements.day + " " + dateElements.month + " " + dateElements.year + `</em><br>`;
+		console.log(event.speakers)
+		colL.innerHTML += `<strong>` + event.speakers.join(", ") + `</strong><br>`;
+		colL.innerHTML += event.venue + `<br>`;
+
+		const img = document.createElement("img");
+		img.src = event.tile;
+		img.width = 200;
+		img.height = 200;
+		colR.append(img);
+
+		eventDiv.append(colL, colR);
+		eventsDiv.append(eventDiv);
 
 
-		//document.querySelector("#files").append(ul);
-	}
-});
+	});
+
+//});
+}
 
 
 </script>
