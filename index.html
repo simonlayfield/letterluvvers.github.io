@@ -20,10 +20,15 @@
 
 body {
 	margin-top: 10px;
-	padding; 0;
+	padding: 0;
 	background-color: grey;
 	display: grid;
+	line-height: 1.5;
 	grid-template-columns: 1fr min(700px, calc(100% - 30px)) 1fr;
+}
+
+h1, h2 {
+	margin: 0;
 }
 
 main {
@@ -31,28 +36,24 @@ main {
 }
 
 header {
-	background-color: var(--panel-background-color);
-	/* height: 100px;	 */
-	border-radius: 10px;
-	padding: 10px;
 }
 
 footer {
-	background-color: var(--panel-background-color);
-	/* height: 100px;	 */
-	border-radius: 10px;
-	padding: 10px;
 	text-align: center;
 }
 
 .event {
-	background-color: var(--panel-background-color);
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	margin-top: 20px;
 	margin-bottom: 20px;
+}
+
+.bubble {
+	background-color: var(--panel-background-color);
 	border-radius: 10px;
-	padding: 10px;
+	padding: 15px;
+	filter: drop-shadow(5px 5px 10px #000);
 }
 
 .event .right {
@@ -73,9 +74,9 @@ footer {
 
 	<main>
 
-	<header>
+	<header class="bubble">
 	<!-- <h1>Letter Luvvers</h1> -->
-	<img src="images/Letter-Luvvers-logo.svg" width="100%" alt="Letter Luvvers" title="Letter Luvvers">
+	<h1><img src="images/Letter-Luvvers-logo.svg" width="100%" alt="Letter Luvvers" title="Letter Luvvers"></h1>
 	<p style="font-size:115%;"><em>Bristol’s meet-up group for everyone who loves fonts &amp; lettering.</em></p>
 	<p>We invite lettering artists, signpainters, typeface designers, letterpress printers, calligraphers, typographers, tattooists, font technologists, font fans and more to come together for drinks and networking every two months. The evenings start with two short talks, then people stay as long as they like for discussion and socializing. The evenings are free, but please sign up on EventBrite so we can judge numbers and contact you in case of important updates. There’s no profit motive, just bringing people of related passions together.</p>
 	</header>
@@ -84,12 +85,12 @@ footer {
 	</div>
 
 
-	<footer>
+	<footer class="bubble">
 		<p style="word-spacing: 105%;">
-		<a href="mailto:letterluvvers@gmail.com"><img class="social-logo" src="images/logo-email.png"></a>
-		<a href="https://www.eventbrite.co.uk/o/letter-luvvers-49388686583" target="_blank"><img class="social-logo" src="images/logo-eventbrite.png"></a>
-		<a href="https://twitter.com/letterluvvers" target="_blank"><img class="social-logo" src="images/logo-twitter.png"></a>
-		<a href="https://www.instagram.com/letterluvvers" target="_blank"><img class="social-logo" src="images/logo-instagram.png"></a>
+		<a href="mailto:letterluvvers@gmail.com" title="Email"><img class="social-logo" src="images/logo-email.png"></a>
+		<a href="https://www.eventbrite.co.uk/o/letter-luvvers-49388686583" target="_blank" title="Eventbrite"><img class="social-logo" src="images/logo-eventbrite.png"></a>
+		<a href="https://twitter.com/letterluvvers" target="_blank" title="Twitter"><img class="social-logo" src="images/logo-twitter.png"></a>
+		<a href="https://www.instagram.com/letterluvvers" target="_blank" title="Instagram"><img class="social-logo" src="images/logo-instagram.png"></a>
 		</p>
 		<p>© Letter Luvvers 2023</p>
 	</footer>
@@ -174,7 +175,7 @@ const data = dataCache;
 			year: parseInt(event.date.substr(0, 4), 10),
 		};
 		const eventDiv = document.createElement("div");
-		eventDiv.classList.add("event");
+		eventDiv.classList.add("event", "bubble");
 
 		const colL = document.createElement("div");
 		const colR = document.createElement("div");
@@ -205,10 +206,10 @@ const data = dataCache;
 		else {
 			const divTemp = document.createElement("div");
 			divTemp.innerHTML = "?";
-			divTemp.style.paddingTop = "40px";
+			divTemp.style.paddingTop = "30px";
 			divTemp.style.backgroundColor = "white";
 			divTemp.style.width = "200px";
-			divTemp.style.height = "160px";
+			divTemp.style.height = "170px";
 			divTemp.style.fontSize = "100px";
 			divTemp.style.textAlign = "center";
 			colR.append(divTemp);
