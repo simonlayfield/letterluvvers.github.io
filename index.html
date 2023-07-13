@@ -56,7 +56,7 @@ footer {
 }
 
 .event .right {
-	text-align: right;
+	/* text-align: right; */
 }
 
 .social-logo {
@@ -103,6 +103,57 @@ footer {
 
 
 <script>
+
+// get images for a path, starting at image0.jpg
+// element is the HTML element that we append the image to
+async function getImages (path, element) {
+
+
+	function _arrayBufferToBase64(buf) {
+		let binary = "";
+		const bytes = new Uint8Array(buf);
+		const len = bytes.byteLength;
+		for (let i = 0; i < len; i++) {
+			binary += String.fromCharCode( bytes[i] );
+		}
+		return window.btoa( binary );
+	}
+
+	let imageNum = 0;
+	let moreImages = true;
+	while (moreImages) {
+		const imagePath = path + "/image-" + imageNum + ".jpg";
+		console.log(imagePath);
+		const response = await fetch(imagePath);
+		//console.log(response)
+		if (response.ok) {
+			const arrayBuffer = await response.arrayBuffer();
+			console.log("yes1");
+			if (arrayBuffer) {
+				console.log("yes2");
+				const img = document.createElement("img");
+				img.src = "data:image/jpg;base64," + _arrayBufferToBase64(arrayBuffer);
+				img.height = 300;
+				img.style.marginLeft = "10px";
+				console.log(element)
+				element.append(img);
+			}
+			imageNum++;
+		}
+		else {
+			console.log("no");
+			moreImages = false;
+		}
+	}
+
+	//const response = await fetch(fontPath);
+			
+
+
+
+
+
+}
 
 
 const dataCache = [
@@ -181,6 +232,11 @@ const data = dataCache;
 
 		const colL = document.createElement("div");
 		const colR = document.createElement("div");
+		const scroller = document.createElement("div");
+		colR.style.position = "relative";
+		colR.style.width = "100%";
+		colR.classList.add("right");
+		colR.style.overflow = "hidden";
 
 		colL.innerHTML = "";
 		colL.innerHTML += `<h2>Letter Luvvers #` + event.number + `</h2>`;
@@ -203,7 +259,8 @@ const data = dataCache;
 			img.src = event.tile;
 			img.width = 300;
 			img.height = 300;
-			colR.append(img);
+			//colR.append(img);
+			scroller.append(img);
 		}
 		else {
 			const divTemp = document.createElement("div");
@@ -214,11 +271,38 @@ const data = dataCache;
 			divTemp.style.height = "230px";
 			divTemp.style.fontSize = "100px";
 			divTemp.style.textAlign = "center";
-			colR.append(divTemp);
+			//colR.append(divTemp);
+			scroller.append(divTemp);
 		}
+
+		// start reading images, attach them to colR div
+		getImages(event.path, scroller);
+
+		scroller.classList.add("scroller");
+		scroller.style.position = "relative";
+		scroller.style.overflowX = "auto";
+		scroller.style.overflowY = "hidden";
+		scroller.style.whiteSpace = "nowrap";
+		colR.append(scroller);
+
+		const fadeOnTop = document.createElement("div");
+		fadeOnTop.classList.add("fade");
+		fadeOnTop.style.position = "absolute";
+		fadeOnTop.style.top = "0";
+		fadeOnTop.style.left = "0";
+		fadeOnTop.style.width = "100%";
+		fadeOnTop.style.height = "100%";
+		fadeOnTop.style.backgroundImage = "linear-gradient(to right, rgba(255,255,255,0) 90%, var(--panel-background-color) 100%)";
+		//fadeOnTop.style.backgroundColor = "red";
+		fadeOnTop.style.pointerEvents = "none";
+		colR.append(fadeOnTop);
+
 
 		eventDiv.append(colL, colR);
 		eventsDiv.append(eventDiv);
+
+
+		//"events/" + item.name + "/tile.jpg"
 
 
 	});
