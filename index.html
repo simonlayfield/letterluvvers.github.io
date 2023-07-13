@@ -5,10 +5,17 @@
 	<title>Home</title>
 	<!-- <link rel="stylesheet" href="css/style.css"> -->
 
+	<link rel="preconnect" href="https://fonts.googleapis.com"> 
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+	<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
 	<style>
+
 
 :root {
 	--panel-background-color: rgb(252, 237, 199);
+	font-family: "Libre Caslon Text", serif;
+	font-size: 19px;
 }
 
 body {
@@ -16,7 +23,7 @@ body {
 	padding; 0;
 	background-color: grey;
 	display: grid;
-	grid-template-columns: 1fr min(600px, calc(100% - 60px)) 1fr;
+	grid-template-columns: 1fr min(700px, calc(100% - 30px)) 1fr;
 }
 
 main {
@@ -67,8 +74,9 @@ footer {
 	<main>
 
 	<header>
-	<h1>Letter Luvvers</h1>
-	<p>Letter Luvvers is a meet-up group for everyone involved with lettering in Bristol.</p>
+	<!-- <h1>Letter Luvvers</h1> -->
+	<img src="images/Letter-Luvvers-logo.svg" width="100%" alt="Letter Luvvers logo">
+	<p><em>Letter Luvvers is a meet-up group for everyone involved with lettering in Bristol.</em></p>
 	<p>We invite lettering artists, signpainters, typeface designers, letterpress printers, calligraphers, typographers, tattooists, font technologists, font fans and more to come together for drinks and networking every two months. The evenings start with two short talks, then people stay as long as they like for discussion and socializing. The evenings are free, but please sign up on EventBrite so we can judge numbers and contact you in case of important updates. There’s no profit motive, just bringing people of related passions together</p>	
 	</header>
 
@@ -102,6 +110,7 @@ const dataCache = [
 	{name: "2023-03-22", path: "events/2023-03-22", speakers: ["Elliot Jay Stocks", "Sophia Tai", "Ellen Bills"], venue: "Letterpress Collective" },
 	{name: "2023-05-17", path: "events/2023-05-17", speakers: ["Rhiannon Daniels", "John McTague", "Stephen Glendinning"], venue: "The Lansdown, Clifton" },
 	{name: "2023-06-29", path: "events/2023-06-29", speakers: ["Josh Saunders", "Filip Paldia"], venue: "Walcot Chapel, Bath" },
+	{name: "2023-08-99", path: "", speakers: ["TBA", "TBA"], venue: "TBA" },
 ]
 
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -118,6 +127,8 @@ fetch ("https://api.github.com/repos/letterluvvers/letterluvvers.github.io/conte
 {
 const data = dataCache;
 
+	const today = new Date();
+	const todayStr = today.toISOString().substr(0, 10);
 
 	// list the files
 	console.log(data);
@@ -126,12 +137,12 @@ const data = dataCache;
 	const events = [];
 	data.forEach(item => {
 		let match;
-		if (match = item.name.match(/^\d{4}-\d{2}-\d{2}$/)) {
+		if (match = item.name.match(/^\d{4}-\d{2}(-\d{2})?$/)) {
 			events.push({
 				date: match[0],
 				path: item.path,
 				name: item.name,
-				tile: "events/" + item.name + "/tile.jpg",
+				tile: item.path ? "events/" + item.name + "/tile.jpg" : "",
 				speakers: item.speakers,
 				venue: item.venue,
 			});
@@ -170,16 +181,38 @@ const data = dataCache;
 
 		colL.innerHTML = "";
 		colL.innerHTML += `<h2>Letter Luvvers #` + event.number + `</h2>`;
-		colL.innerHTML += `<em>` + dateElements.day + " " + dateElements.month + " " + dateElements.year + `</em><br>`;
+		if (event.date <= todayStr) {
+			colL.innerHTML += `<em>` + dateElements.day + " " + dateElements.month + " " + dateElements.year + `</em><br>`;
+		} else {
+			if (dateElements.day == 99) {
+				colL.innerHTML += `<em>upcoming!</em><br>`;
+			}
+			else {
+				colL.innerHTML += `<em>` + dateElements.day + " " + dateElements.month + " " + dateElements.year + `</em><br>`;
+			}
+		}
 		console.log(event.speakers)
 		colL.innerHTML += `<strong>` + event.speakers.join(", ") + `</strong><br>`;
 		colL.innerHTML += event.venue + `<br>`;
 
-		const img = document.createElement("img");
-		img.src = event.tile;
-		img.width = 200;
-		img.height = 200;
-		colR.append(img);
+		if (event.tile) {
+			const img = document.createElement("img");
+			img.src = event.tile;
+			img.width = 200;
+			img.height = 200;
+			colR.append(img);
+		}
+		else {
+			const divTemp = document.createElement("div");
+			divTemp.innerHTML = "?";
+			divTemp.style.paddingTop = "40px";
+			divTemp.style.backgroundColor = "white";
+			divTemp.style.width = "200px";
+			divTemp.style.height = "160px";
+			divTemp.style.fontSize = "100px";
+			divTemp.style.textAlign = "center";
+			colR.append(divTemp);
+		}
 
 		eventDiv.append(colL, colR);
 		eventsDiv.append(eventDiv);
