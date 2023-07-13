@@ -131,12 +131,14 @@ async function getImages (path, element) {
 			console.log("yes1");
 			if (arrayBuffer) {
 				console.log("yes2");
+				const link = document.createElement("a");
 				const img = document.createElement("img");
-				img.src = "data:image/jpg;base64," + _arrayBufferToBase64(arrayBuffer);
+				//link.href = img.src = "data:image/jpg;base64," + _arrayBufferToBase64(arrayBuffer);
+				link.href = img.src = imagePath; // we don’t actually link to the data url, it was just to retrieve it
 				img.height = 300;
 				img.style.marginLeft = "10px";
-				console.log(element)
-				element.append(img);
+				link.append(img);
+				element.append(link);
 			}
 			imageNum++;
 		}
@@ -250,7 +252,6 @@ const data = dataCache;
 				colL.innerHTML += `<em>` + dateElements.day + " " + dateElements.month + " " + dateElements.year + `</em><br>`;
 			}
 		}
-		console.log(event.speakers)
 		colL.innerHTML += `<strong>` + event.speakers.join(", ") + `</strong><br>`;
 		colL.innerHTML += event.venue + `<br>`;
 
@@ -259,7 +260,6 @@ const data = dataCache;
 			img.src = event.tile;
 			img.width = 300;
 			img.height = 300;
-			//colR.append(img);
 			scroller.append(img);
 		}
 		else {
@@ -271,7 +271,6 @@ const data = dataCache;
 			divTemp.style.height = "230px";
 			divTemp.style.fontSize = "100px";
 			divTemp.style.textAlign = "center";
-			//colR.append(divTemp);
 			scroller.append(divTemp);
 		}
 
@@ -293,16 +292,12 @@ const data = dataCache;
 		fadeOnTop.style.width = "100%";
 		fadeOnTop.style.height = "100%";
 		fadeOnTop.style.backgroundImage = "linear-gradient(to right, rgba(255,255,255,0) 90%, var(--panel-background-color) 100%)";
-		//fadeOnTop.style.backgroundColor = "red";
 		fadeOnTop.style.pointerEvents = "none";
 		colR.append(fadeOnTop);
 
 
 		eventDiv.append(colL, colR);
 		eventsDiv.append(eventDiv);
-
-
-		//"events/" + item.name + "/tile.jpg"
 
 
 	});
