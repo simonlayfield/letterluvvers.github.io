@@ -47,10 +47,10 @@ fetch ("https://api.github.com/repos/letterluvvers/letterluvvers.github.io/conte
 			const img = document.createElement("img");
 			console.log("it's a date", data[i].name, ` event #${eventNum}`);
 			a.textContent = data[i].name;
-			a.href = data[i].path + "/_tile.jpg";
+			a.href = data[i].html_url;
 			li.append(a);
 
-			img.src = data[i].download_url;
+			img.src = data[i].path + "/_tile.jpg";
 			img.width = 200;
 			img.height = 200;
 			li.append(img);
